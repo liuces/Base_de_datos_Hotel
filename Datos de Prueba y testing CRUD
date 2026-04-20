@@ -1,0 +1,126 @@
+-- ============================================================
+-- DATOS DE PRUEBA — TESTING CRUD
+-- ============================================================
+ 
+-- HOTEL
+INSERT INTO HOTEL (nombre_hotel, categoria_hotel, ciudad_hotel, direccion_hotel) VALUES
+('Hotel Pacific Reef', '5 estrellas', 'Viña del Mar', 'Av. Marina 1250, Viña del Mar'),
+('Hotel Pacific Reef Express', '3 estrellas', 'Valparaíso', 'Cerro Alegre 340, Valparaíso');
+ 
+-- USUARIOS (password_hash simulado con SHA2 para pruebas)
+INSERT INTO USUARIO (rut_usuario, nombre_usuario, ap_pat_usuario, ap_mat_usuario, correo_usuario, fono_usuario, password_hash, rol) VALUES
+-- Clientes
+('12345678-9', 'Juan',    'González',  'Pérez',   'juan.gonzalez@mail.com',   '+56912345678', SHA2('Pass1234!', 256), 'cliente'),
+('9876543-2',  'María',   'Torres',    'Silva',   'maria.torres@mail.com',    '+56987654321', SHA2('Pass1234!', 256), 'cliente'),
+('15432100-1', 'Carlos',  'Muñoz',     'Rojas',   'carlos.munoz@mail.com',    '+56911223344', SHA2('Pass1234!', 256), 'cliente'),
+('11223344-5', 'Ana',     'Vega',      'Morales', 'ana.vega@mail.com',        '+56955667788', SHA2('Pass1234!', 256), 'cliente'),
+('19988776-6', 'Pedro',   'Ramírez',   'Lagos',   'pedro.ramirez@mail.com',   '+56933445566', SHA2('Pass1234!', 256), 'cliente'),
+-- Empleados
+('14500200-3', 'Carolina','Reguerin',  'Díaz',    'carolina.reguerin@hotel.cl','+56977889900', SHA2('Admin2026!', 256), 'empleado'),
+('17300100-K', 'Andrés',  'Contreras', 'Soto',    'andres.contreras@hotel.cl', '+56966778899', SHA2('Admin2026!', 256), 'empleado'),
+-- Administrador
+('13400500-7', 'Lucas',   'Ramírez',   'Blanco',  'lucas.ramirez@hotel.cl',   '+56944556677', SHA2('Admin2026!', 256), 'administrador');
+ 
+-- CLIENTES (relacionados con usuarios)
+INSERT INTO CLIENTE (id_usuario) VALUES (1),(2),(3),(4),(5);
+ 
+-- EMPLEADOS (relacionados con usuarios y hotel)
+INSERT INTO EMPLEADO (id_usuario, id_hotel, cargo) VALUES
+(6, 1, 'Recepcionista'),
+(7, 1, 'Administrador de Reservas'),
+(8, 1, 'Administrador General');
+ 
+-- HABITACIONES
+INSERT INTO HABITACION (numero_habitacion, tipo_habitacion, capacidad_habitacion, precio_habitacion, descripcion, estado_habitacion, id_hotel) VALUES
+('101', 'Turista',  2, 45000.00, 'Habitación estándar con vista al jardín, cama doble.',       'disponible', 1),
+('102', 'Turista',  2, 45000.00, 'Habitación estándar con vista al jardín, cama doble.',       'ocupada',    1),
+('201', 'Premium',  2, 85000.00, 'Habitación premium con vista al mar, cama king.',             'disponible', 1),
+('202', 'Premium',  3, 95000.00, 'Habitación premium familiar con vista al mar, cama king.',   'disponible', 1),
+('301', 'Suite',    4, 150000.00,'Suite presidencial con jacuzzi y vista panorámica al mar.',  'disponible', 1),
+('302', 'Premium',  2, 85000.00, 'Habitación premium con terraza privada, cama king.',         'ocupada',    1),
+('103', 'Turista',  2, 42000.00, 'Habitación estándar, cama doble, piso 1.',                   'disponible', 2),
+('203', 'Premium',  2, 78000.00, 'Habitación premium con vista al cerro.',                     'disponible', 2);
+ 
+-- RESERVAS
+INSERT INTO RESERVA (fecha_entrada, fecha_salida, cantidad_personas, monto_total, estado_reserva, id_cliente, id_habitacion) VALUES
+('2026-05-15', '2026-05-18', 2, 76500.00,  'confirmada', 1, 6),  -- Juan, hab 302 Premium, 3 noches 30%
+('2026-05-16', '2026-05-20', 2, 54000.00,  'confirmada', 2, 2),  -- María, hab 102 Turista, 4 noches 30%
+('2026-05-17', '2026-05-19', 3, 57000.00,  'pendiente',  3, 4),  -- Carlos, hab 202 Premium, 2 noches 30%
+('2026-05-18', '2026-05-22', 2, 51000.00,  'pendiente',  4, 1),  -- Ana, hab 101 Turista, 4 noches 30%
+('2026-06-01', '2026-06-05', 4, 180000.00, 'confirmada', 5, 5);  -- Pedro, Suite, 4 noches 30%
+ 
+-- PAGOS (30% del monto total)
+INSERT INTO PAGO (id_reserva, monto_pagado, porcentaje_pago, metodo_pago, estado_pago) VALUES
+(1, 22950.00, 30, 'tarjeta_credito',  'procesado'),
+(2, 16200.00, 30, 'transferencia',    'procesado'),
+(3, 17100.00, 30, 'tarjeta_debito',   'pendiente'),
+(4, 15300.00, 30, 'tarjeta_credito',  'pendiente'),
+(5, 54000.00, 30, 'tarjeta_credito',  'procesado');
+ 
+-- TICKETS QR (para reservas confirmadas)
+INSERT INTO TICKET (id_reserva, codigo_qr, estado_ticket) VALUES
+(1, 'QR-RES00247-2026-A1B2C3', 'activo'),
+(2, 'QR-RES00248-2026-D4E5F6', 'activo'),
+(5, 'QR-RES00249-2026-G7H8I9', 'activo');
+ 
+-- ============================================================
+-- CONSULTAS DE VERIFICACIÓN CRUD
+-- ============================================================
+ 
+-- READ: Ver todas las reservas con datos del cliente y habitación
+SELECT
+    r.id_reserva,
+    CONCAT(u.nombre_usuario, ' ', u.ap_pat_usuario) AS cliente,
+    h.numero_habitacion,
+    h.tipo_habitacion,
+    r.fecha_entrada,
+    r.fecha_salida,
+    DATEDIFF(r.fecha_salida, r.fecha_entrada) AS noches,
+    r.monto_total,
+    r.estado_reserva
+FROM RESERVA r
+JOIN CLIENTE c ON r.id_cliente = c.id_cliente
+JOIN USUARIO u ON c.id_usuario = u.id_usuario
+JOIN HABITACION h ON r.id_habitacion = h.id_habitacion
+ORDER BY r.fecha_entrada;
+ 
+-- READ: Disponibilidad de habitaciones
+SELECT
+    numero_habitacion,
+    tipo_habitacion,
+    capacidad_habitacion,
+    precio_habitacion,
+    estado_habitacion
+FROM HABITACION
+WHERE id_hotel = 1
+ORDER BY tipo_habitacion, precio_habitacion;
+ 
+-- READ: Reporte de ingresos por reserva
+SELECT
+    r.id_reserva,
+    CONCAT(u.nombre_usuario, ' ', u.ap_pat_usuario) AS cliente,
+    r.monto_total AS total_reserva,
+    p.monto_pagado AS pagado_30,
+    p.metodo_pago,
+    p.estado_pago
+FROM RESERVA r
+JOIN CLIENTE c ON r.id_cliente = c.id_cliente
+JOIN USUARIO u ON c.id_usuario = u.id_usuario
+JOIN PAGO p ON r.id_reserva = p.id_reserva
+ORDER BY r.id_reserva;
+ 
+-- UPDATE: Confirmar reserva pendiente (ejemplo)
+UPDATE RESERVA SET estado_reserva = 'confirmada' WHERE id_reserva = 3;
+ 
+-- UPDATE: Marcar habitación como disponible
+UPDATE HABITACION SET estado_habitacion = 'disponible' WHERE id_habitacion = 2;
+ 
+-- Verificación final: conteo de registros por tabla
+SELECT 'HOTEL'      AS tabla, COUNT(*) AS registros FROM HOTEL      UNION ALL
+SELECT 'USUARIO'    AS tabla, COUNT(*) AS registros FROM USUARIO    UNION ALL
+SELECT 'CLIENTE'    AS tabla, COUNT(*) AS registros FROM CLIENTE    UNION ALL
+SELECT 'EMPLEADO'   AS tabla, COUNT(*) AS registros FROM EMPLEADO   UNION ALL
+SELECT 'HABITACION' AS tabla, COUNT(*) AS registros FROM HABITACION UNION ALL
+SELECT 'RESERVA'    AS tabla, COUNT(*) AS registros FROM RESERVA    UNION ALL
+SELECT 'PAGO'       AS tabla, COUNT(*) AS registros FROM PAGO       UNION ALL
+SELECT 'TICKET'     AS tabla, COUNT(*) AS registros FROM TICKET;

@@ -6,61 +6,111 @@ USE BDD_HOTEL;
 
 -- CREACION DE TABLAS
 
+-- Tabla HOTEL
 CREATE TABLE HOTEL (
-    id_hotel INT NOT NULL AUTO_INCREMENT,
-    nombre_hotel VARCHAR(20) NOT NULL,
+    id_hotel        INT NOT NULL AUTO_INCREMENT,
+    nombre_hotel    VARCHAR(50) NOT NULL,
     categoria_hotel VARCHAR(20) NOT NULL,
-    ciudad_hotel VARCHAR(20) NOT NULL,
-    direccion_hotel VARCHAR(40) NOT NULL,
-    CONSTRAINT PK_HOTEL PRIMARY KEY(id_hotel)
-);   
-
-CREATE TABLE CLIENTE (
-    id_cliente INT NOT NULL AUTO_INCREMENT,
-    rut_cliente VARCHAR(12) NOT NULL,
-    nombre_cliente VARCHAR(20) NOT NULL,
-    ap_pat_cliente VARCHAR(20) NOT NULL,
-    ap_mat_cliente VARCHAR(20) NOT NULL,
-    correo_cliente VARCHAR(50) NOT NULL,
-    fono_cliente VARCHAR(15) NOT NULL,
-    CONSTRAINT PK_CLIENTE PRIMARY KEY(id_cliente)
+    ciudad_hotel    VARCHAR(30) NOT NULL,
+    direccion_hotel VARCHAR(60) NOT NULL,
+    CONSTRAINT PK_HOTEL PRIMARY KEY (id_hotel)
 );
-
+ 
+-- Tabla USUARIO
+-- Unifica acceso de clientes, empleados y administradores
+CREATE TABLE USUARIO (
+    id_usuario      INT NOT NULL AUTO_INCREMENT,
+    rut_usuario     VARCHAR(12) NOT NULL UNIQUE,
+    nombre_usuario  VARCHAR(30) NOT NULL,
+    ap_pat_usuario  VARCHAR(30) NOT NULL,
+    ap_mat_usuario  VARCHAR(30) NOT NULL,
+    correo_usuario  VARCHAR(60) NOT NULL UNIQUE,
+    fono_usuario    VARCHAR(15) NOT NULL,
+    password_hash   VARCHAR(255) NOT NULL,
+    rol             ENUM('cliente','empleado','administrador') NOT NULL DEFAULT 'cliente',
+    estado          ENUM('activo','inactivo') NOT NULL DEFAULT 'activo',
+    fecha_registro  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_USUARIO PRIMARY KEY (id_usuario)
+);
+ 
+-- Tabla CLIENTE
+CREATE TABLE CLIENTE (
+    id_cliente  INT NOT NULL AUTO_INCREMENT,
+    id_usuario  INT NOT NULL,
+    CONSTRAINT PK_CLIENTE PRIMARY KEY (id_cliente),
+    CONSTRAINT FK_CLIENTE_USUARIO FOREIGN KEY (id_usuario)
+        REFERENCES USUARIO (id_usuario) ON DELETE CASCADE
+);
+ 
+-- Tabla EMPLEADO
 CREATE TABLE EMPLEADO (
     id_empleado INT NOT NULL AUTO_INCREMENT,
-    rut_empleado VARCHAR(12) NOT NULL,
-    nombre_empleado VARCHAR(20) NOT NULL,
-    ap_pat_empleado VARCHAR(20) NOT NULL,
-    ap_mat_empleado VARCHAR(20) NOT NULL,
-    correo_empleado VARCHAR(50) NOT NULL,
-    fono_empleado VARCHAR(15) NOT NULL,
-    id_hotel INT NOT NULL,
-    CONSTRAINT PK_EMPLEADO PRIMARY KEY(id_empleado),
-    CONSTRAINT EMPLEADO_HOTEL_FK FOREIGN KEY (id_hotel)
+    id_usuario  INT NOT NULL,
+    id_hotel    INT NOT NULL,
+    cargo       VARCHAR(40) NOT NULL DEFAULT 'Recepcionista',
+    CONSTRAINT PK_EMPLEADO PRIMARY KEY (id_empleado),
+    CONSTRAINT FK_EMPLEADO_USUARIO FOREIGN KEY (id_usuario)
+        REFERENCES USUARIO (id_usuario) ON DELETE CASCADE,
+    CONSTRAINT FK_EMPLEADO_HOTEL FOREIGN KEY (id_hotel)
         REFERENCES HOTEL (id_hotel) ON DELETE CASCADE
 );
-
+ 
+-- Tabla HABITACION*
 CREATE TABLE HABITACION (
-    id_habitacion INT NOT NULL AUTO_INCREMENT,
-    tipo_habitacion VARCHAR(20) NOT NULL,
+    id_habitacion       INT NOT NULL AUTO_INCREMENT,
+    numero_habitacion   VARCHAR(10) NOT NULL,
+    tipo_habitacion     ENUM('Turista','Premium','Suite') NOT NULL,
     capacidad_habitacion INT NOT NULL,
-    precio_habitacion DECIMAL(10,2) NOT NULL,
-    id_hotel INT NOT NULL,
-    CONSTRAINT PK_HABITACION PRIMARY KEY(id_habitacion),
-    CONSTRAINT HABITACION_HOTEL_FK FOREIGN KEY (id_hotel)
+    precio_habitacion   DECIMAL(10,2) NOT NULL,
+    descripcion         VARCHAR(200),
+    estado_habitacion   ENUM('disponible','ocupada','mantencion') NOT NULL DEFAULT 'disponible',
+    id_hotel            INT NOT NULL,
+    CONSTRAINT PK_HABITACION PRIMARY KEY (id_habitacion),
+    CONSTRAINT FK_HABITACION_HOTEL FOREIGN KEY (id_hotel)
         REFERENCES HOTEL (id_hotel) ON DELETE CASCADE
 );
-
+ 
+-- Tabla RESERVA*
 CREATE TABLE RESERVA (
-    id_reserva INT NOT NULL AUTO_INCREMENT,
-    fecha_entrada DATE NOT NULL,
-    fecha_salida DATE NOT NULL,
+    id_reserva        INT NOT NULL AUTO_INCREMENT,
+    fecha_entrada     DATE NOT NULL,
+    fecha_salida      DATE NOT NULL,
     cantidad_personas INT NOT NULL,
-    id_cliente INT NOT NULL,
-    id_habitacion INT NOT NULL,
-    CONSTRAINT PK_RESERVA PRIMARY KEY(id_reserva),
-    CONSTRAINT RESERVA_CLIENTE_FK FOREIGN KEY (id_cliente)
+    monto_total       DECIMAL(10,2) NOT NULL,
+    estado_reserva    ENUM('pendiente','confirmada','cancelada','completada') NOT NULL DEFAULT 'pendiente',
+    fecha_creacion    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_cliente        INT NOT NULL,
+    id_habitacion     INT NOT NULL,
+    CONSTRAINT PK_RESERVA PRIMARY KEY (id_reserva),
+    CONSTRAINT FK_RESERVA_CLIENTE FOREIGN KEY (id_cliente)
         REFERENCES CLIENTE (id_cliente) ON DELETE CASCADE,
-    CONSTRAINT RESERVA_HABITACION_FK FOREIGN KEY (id_habitacion)
+    CONSTRAINT FK_RESERVA_HABITACION FOREIGN KEY (id_habitacion)
         REFERENCES HABITACION (id_habitacion) ON DELETE CASCADE
 );
+ 
+-- Tabla PAGO*
+CREATE TABLE PAGO (
+    id_pago         INT NOT NULL AUTO_INCREMENT,
+    id_reserva      INT NOT NULL,
+    monto_pagado    DECIMAL(10,2) NOT NULL,
+    porcentaje_pago INT NOT NULL DEFAULT 30,
+    metodo_pago     ENUM('tarjeta_credito','tarjeta_debito','transferencia') NOT NULL,
+    estado_pago     ENUM('pendiente','procesado','rechazado') NOT NULL DEFAULT 'pendiente',
+    fecha_pago      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT PK_PAGO PRIMARY KEY (id_pago),
+    CONSTRAINT FK_PAGO_RESERVA FOREIGN KEY (id_reserva)
+        REFERENCES RESERVA (id_reserva) ON DELETE CASCADE
+);
+ 
+-- Tabla TICKET*
+CREATE TABLE TICKET (
+    id_ticket       INT NOT NULL AUTO_INCREMENT,
+    id_reserva      INT NOT NULL,
+    codigo_qr       VARCHAR(100) NOT NULL UNIQUE,
+    fecha_emision   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    estado_ticket   ENUM('activo','usado','cancelado') NOT NULL DEFAULT 'activo',
+    CONSTRAINT PK_TICKET PRIMARY KEY (id_ticket),
+    CONSTRAINT FK_TICKET_RESERVA FOREIGN KEY (id_reserva)
+        REFERENCES RESERVA (id_reserva) ON DELETE CASCADE
+);
+ 
