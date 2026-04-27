@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef — Gestión Usuarios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/admin_usuarios.css">
+</head>
+<body>
+
+<!-- ── SIDEBAR ──────────────────────────────────── -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="wave">🌊</div>
+        <h2>Hotel <span>Pacific Reef</span></h2>
+        <p>Panel de administración</p>
+    </div>
+
+    <nav class="sidebar-nav">
+        <span class="nav-section-label">Principal</span>
+        <a href="/admin/dashboard" class="nav-item">
+            <span class="nav-icon">📊</span> Dashboard
+        </a>
+
+        <span class="nav-section-label">Gestión</span>
+        <a href="/admin/reservas" class="nav-item">
+            <span class="nav-icon">📅</span> Reservas
+        </a>
+        <a href="/admin/usuarios" class="nav-item active">
+            <span class="nav-icon">👥</span> Usuarios
+        </a>
+        <a href="/admin/catalogo" class="nav-item">
+            <span class="nav-icon">🏨</span> Catálogo
+        </a>
+        <a href="/admin/precios" class="nav-item">
+            <span class="nav-icon">💲</span> Precios
+        </a>
+
+        <span class="nav-section-label">Análisis</span>
+        <a href="/admin/reportes" class="nav-item">
+            <span class="nav-icon">📈</span> Reportes
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="sidebar-user">
+            <div class="avatar">A</div>
+            <div class="user-info">
+                <p>Administrador</p>
+                <span>admin@pacificreef.cl</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ── MAIN ──────────────────────────────────────── -->
+<div class="main-wrapper">
+
+    <div class="topbar">
+        <div class="topbar-left">
+            <h1>Gestión de Usuarios</h1>
+            <p>Administra clientes, empleados y catálogo de habitaciones</p>
+        </div>
+        <div class="topbar-right">
+            <a href="/admin/dashboard">Dashboard</a>
+            <div class="topbar-divider"></div>
+            <a href="/logout" class="logout">Salir</a>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- ── SECCIÓN USUARIOS ──────────────────── -->
+        <div class="section-header">
+            <div>
+                <h2>Usuarios registrados</h2>
+                <p>Gestiona clientes y empleados del sistema</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="toolbar">
+                <div class="search-input-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="text"
+                        id="searchUsuario"
+                        placeholder="Buscar por nombre, RUT o correo…"
+                        oninput="filtrarUsuarios()"
+                    >
+                </div>
+                <select class="filter-select" id="filterRol" onchange="filtrarUsuarios()">
+                    <option value="">Todos los roles</option>
+                    <option value="cliente">Cliente</option>
+                    <option value="empleado">Empleado</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button class="btn-nuevo" onclick="abrirModalNuevo()">
+                    ＋ Nuevo usuario
+                </button>
+            </div>
+
+            <table id="tablaUsuarios">
+                <thead>
+                    <tr>
+                        <th>RUT</th>
+                        <th>Nombre completo</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyUsuarios">
+                    <tr data-nombre="juan gonzalez" data-rol="cliente">
+                        <td class="td-rut">12.345.678-9</td>
+                        <td class="td-name">Juan González</td>
+                        <td>juan@mail.com</td>
+                        <td>+56 9 1234 5678</td>
+                        <td><span class="badge badge-cliente">Cliente</span></td>
+                        <td>
+                            <div class="td-actions">
+                                <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
+                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '12.345.678-9', 'Juan González')">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-nombre="maria torres" data-rol="cliente">
+                        <td class="td-rut">9.876.543-2</td>
+                        <td class="td-name">María Torres</td>
+                        <td>mtorres@mail.com</td>
+                        <td>+56 9 8765 4321</td>
+                        <td><span class="badge badge-cliente">Cliente</span></td>
+                        <td>
+                            <div class="td-actions">
+                                <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
+                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '9.876.543-2', 'María Torres')">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-nombre="carlos rojas" data-rol="empleado">
+                        <td class="td-rut">15.432.100-1</td>
+                        <td class="td-name">Carlos Rojas</td>
+                        <td>crojas@pacificreef.cl</td>
+                        <td>+56 9 5555 1234</td>
+                        <td><span class="badge badge-empleado">Empleado</span></td>
+                        <td>
+                            <div class="td-actions">
+                                <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
+                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '15.432.100-1', 'Carlos Rojas')">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-nombre="ana perez" data-rol="cliente">
+                        <td class="td-rut">18.765.432-K</td>
+                        <td class="td-name">Ana Pérez</td>
+                        <td>aperez@mail.com</td>
+                        <td>+56 9 3333 9876</td>
+                        <td><span class="badge badge-cliente">Cliente</span></td>
+                        <td>
+                            <div class="td-actions">
+                                <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
+                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '18.765.432-K', 'Ana Pérez')">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-nombre="luis muñoz" data-rol="empleado">
+                        <td class="td-rut">11.222.333-4</td>
+                        <td class="td-name">Luis Muñoz</td>
+                        <td>lmunoz@pacificreef.cl</td>
+                        <td>+56 9 7777 2222</td>
+                        <td><span class="badge badge-empleado">Empleado</span></td>
+                        <td>
+                            <div class="td-actions">
+                                <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
+                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '11.222.333-4', 'Luis Muñoz')">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="table-footer">
+                <span id="countLabel">Mostrando 5 de 5 usuarios</span>
+                <div class="pagination">
+                    <button class="page-btn">‹</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">›</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── SECCIÓN CATÁLOGO ──────────────────── -->
+        <div class="section-header" style="margin-top: 8px;">
+            <div>
+                <h2>Catálogo de habitaciones</h2>
+                <p>Consulta y actualiza la información de cada habitación</p>
+            </div>
+        </div>
+
+        <div class="catalogo-grid">
+
+            <!-- Formulario edición -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Actualizar habitación</h3>
+                </div>
+                <div class="catalogo-form">
+                    <div class="error-msg" id="catErrorMsg"></div>
+
+                    <form id="catalogoForm" action="/admin/catalogo/actualizar" method="POST" onsubmit="guardarCatalogo(event)">
+                        <input type="hidden" name="id_habitacion" id="idHabitacion" value="1">
+
+                        <div class="form-section-title">Información general</div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tipoHab">Tipo de habitación</label>
+                                <select id="tipoHab" name="tipo">
+                                    <option value="turista">Turista</option>
+                                    <option value="premium" selected>Premium</option>
+                                    <option value="suite">Suite</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="numHab">Número de habitación</label>
+                                <input type="text" id="numHab" name="numero" placeholder="Ej: 302" value="302">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="capacidad">Capacidad</label>
+                                <select id="capacidad" name="capacidad">
+                                    <option value="1">1 persona</option>
+                                    <option value="2" selected>2 personas</option>
+                                    <option value="3">3 personas</option>
+                                    <option value="4">4 personas</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="estadoHab">Estado</label>
+                                <select id="estadoHab" name="estado">
+                                    <option value="disponible" selected>Disponible</option>
+                                    <option value="ocupada">Ocupada</option>
+                                    <option value="mantenimiento">Mantenimiento</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                            <textarea id="descripcion" name="descripcion" placeholder="Vista al mar, cama king…">Vista al mar, cama king, terraza privada. Experiencia de lujo.</textarea>
+                        </div>
+
+                        <div class="form-section-title">Precio</div>
+
+                        <div class="form-group">
+                            <label for="precio">Precio por noche</label>
+                            <div class="precio-input-wrap">
+                                <span class="prefix">$</span>
+                                <input type="number" id="precio" name="precio" placeholder="85000" value="85000" min="0" step="1000">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-guardar">Guardar cambios</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Lista habitaciones -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Habitaciones registradas</h3>
+                    <a href="/admin/catalogo/nueva">+ Agregar</a>
+                </div>
+                <div class="hab-list" id="habList">
+
+                    <div class="hab-list-item" onclick="seleccionarHab(this, '1', 'premium', '302', '2', 'disponible', 'Vista al mar, cama king, terraza privada. Experiencia de lujo.', '85000')">
+                        <div class="hab-list-left">
+                            <div class="hab-list-icon">🌊</div>
+                            <div class="hab-list-info">
+                                <h4>Premium 302</h4>
+                                <p>2 personas · Cama king</p>
+                            </div>
+                        </div>
+                        <div class="hab-list-right">
+                            <span class="badge-estado-disp">Disponible</span>
+                            <span class="hab-precio">\$85.000</span>
+                        </div>
+                    </div>
+
+                    <div class="hab-list-item" onclick="seleccionarHab(this, '2', 'turista', '105', '2', 'disponible', 'Vista al jardín, cama doble, baño privado. Ideal para parejas.', '45000')">
+                        <div class="hab-list-left">
+                            <div class="hab-list-icon">🏖️</div>
+                            <div class="hab-list-info">
+                                <h4>Turista 105</h4>
+                                <p>2 personas · Cama doble</p>
+                            </div>
+                        </div>
+                        <div class="hab-list-right">
+                            <span class="badge-estado-disp">Disponible</span>
+                            <span class="hab-precio">\$45.000</span>
+                        </div>
+                    </div>
+
+                    <div class="hab-list-item" onclick="seleccionarHab(this, '3', 'premium', '310', '2', 'ocupada', 'Vista al mar, cama king. No disponible actualmente.', '85000')">
+                        <div class="hab-list-left">
+                            <div class="hab-list-icon">🏨</div>
+                            <div class="hab-list-info">
+                                <h4>Premium 310</h4>
+                                <p>2 personas · Cama king</p>
+                            </div>
+                        </div>
+                        <div class="hab-list-right">
+                            <span class="badge-estado-ocup">Ocupada</span>
+                            <span class="hab-precio">\$85.000</span>
+                        </div>
+                    </div>
+
+                    <div class="hab-list-item" onclick="seleccionarHab(this, '4', 'suite', '208', '4', 'disponible', 'Jacuzzi, vista panorámica al mar, sala de estar. La mejor experiencia.', '150000')">
+                        <div class="hab-list-left">
+                            <div class="hab-list-icon">✨</div>
+                            <div class="hab-list-info">
+                                <h4>Suite 208</h4>
+                                <p>4 personas · Jacuzzi</p>
+                            </div>
+                        </div>
+                        <div class="hab-list-right">
+                            <span class="badge-estado-disp">Disponible</span>
+                            <span class="hab-precio">\$150.000</span>
+                        </div>
+                    </div>
+
+                    <div class="hab-list-item" onclick="seleccionarHab(this, '5', 'turista', '201', '2', 'mantenimiento', 'Vista al jardín, cama doble. En mantenimiento programado.', '45000')">
+                        <div class="hab-list-left">
+                            <div class="hab-list-icon">🔧</div>
+                            <div class="hab-list-info">
+                                <h4>Turista 201</h4>
+                                <p>2 personas · Cama doble</p>
+                            </div>
+                        </div>
+                        <div class="hab-list-right">
+                            <span class="badge-estado-mant">Mantenimiento</span>
+                            <span class="hab-precio">\$45.000</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL NUEVO / EDITAR USUARIO ─────────────── -->
+<div class="modal-overlay" id="modalUsuario">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modalTitle">Nuevo usuario</h3>
+            <button class="modal-close" onclick="cerrarModal('modalUsuario')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="error-msg" id="modalErrorMsg"></div>
+            <form id="formUsuario" action="/admin/usuarios/guardar" method="POST">
+                <input type="hidden" name="accion" id="accionUsuario" value="crear">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" id="mNombre" placeholder="Juan" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido paterno</label>
+                        <input type="text" name="ap_pat" id="mApPat" placeholder="González" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Apellido materno</label>
+                        <input type="text" name="ap_mat" id="mApMat" placeholder="Pérez" required>
+                    </div>
+                    <div class="form-group">
+                        <label>RUT</label>
+                        <input type="text" name="rut" id="mRut" placeholder="12.345.678-9" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" name="correo" id="mCorreo" placeholder="usuario@mail.com" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" name="telefono" id="mTelefono" placeholder="+56 9 1234 5678">
+                    </div>
+                    <div class="form-group">
+                        <label>Rol</label>
+                        <select name="rol" id="mRol">
+                            <option value="cliente">Cliente</option>
+                            <option value="empleado">Empleado</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="passwordGroup">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" id="mPassword" placeholder="••••••••">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-cancel" onclick="cerrarModal('modalUsuario')">Cancelar</button>
+            <button class="btn-modal-confirm" onclick="submitUsuario()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL CONFIRMAR ELIMINAR ──────────────────── -->
+<div class="modal-overlay" id="modalEliminar">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Eliminar usuario</h3>
+            <button class="modal-close" onclick="cerrarModal('modalEliminar')">✕</button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size:0.9rem; color:#374151; line-height:1.6;">
+                ¿Estás seguro de que deseas eliminar al usuario
+                <strong id="eliminarNombre"></strong>
+                (<span id="eliminarRut" style="color:var(--gris);"></span>)?
+                Esta acción no se puede deshacer.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-cancel" onclick="cerrarModal('modalEliminar')">Cancelar</button>
+            <button class="btn-modal-confirm btn-modal-danger" onclick="confirmarEliminar()">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── TOAST ─────────────────────────────────────── -->
+<div class="toast" id="toast">
+    <span id="toastIcon">✅</span>
+    <span id="toastMsg">Cambios guardados correctamente.</span>
+</div>
+
+<script src="../static/js/admin_usuarios.js"></script>
+
+</body>
+</html>

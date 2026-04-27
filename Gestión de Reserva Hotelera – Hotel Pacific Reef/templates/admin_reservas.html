@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef — Reportes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/admin_reservas.css">
+</head>
+<body>
+
+    <!-- ── SIDEBAR ───────────────────────────────── -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="wave">🌊</div>
+            <h2>Hotel <span>Pacific Reef</span></h2>
+            <p>Panel de administración</p>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="nav-section-label">Principal</span>
+            <a href="/admin/dashboard" class="nav-item">
+                <span class="nav-icon">📊</span> Dashboard
+            </a>
+
+            <span class="nav-section-label">Gestión</span>
+            <a href="/admin/reservas" class="nav-item">
+                <span class="nav-icon">📅</span> Reservas
+            </a>
+            <a href="/admin/usuarios" class="nav-item">
+                <span class="nav-icon">👥</span> Usuarios
+            </a>
+            <a href="/admin/catalogo" class="nav-item">
+                <span class="nav-icon">🏨</span> Catálogo
+            </a>
+            <a href="/admin/precios" class="nav-item">
+                <span class="nav-icon">💲</span> Precios
+            </a>
+
+            <span class="nav-section-label">Análisis</span>
+            <a href="/admin/reportes" class="nav-item active">
+                <span class="nav-icon">📈</span> Reportes
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="avatar">A</div>
+                <div class="user-info">
+                    <p>Administrador</p>
+                    <span>admin@pacificreef.cl</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── MAIN ─────────────────────────────────── -->
+    <div class="main-wrapper">
+
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Panel Admin</h1>
+                <p>Lunes, 27 de abril de 2026</p>
+            </div>
+            <div class="topbar-right">
+                <a href="/admin/dashboard">Dashboard</a>
+                <div class="topbar-divider"></div>
+                <a href="/logout" class="logout">Salir</a>
+            </div>
+        </div>
+
+        <main class="content">
+            <div class="content-header">
+                <h2>Generar reportes</h2>
+                <p>Consulta métricas del hotel por rango de fechas y exporta los resultados.</p>
+            </div>
+
+            <!-- Filtro -->
+            <section class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h3>Filtrar período</h3>
+                </div>
+                <div class="card-body">
+                    <form class="filter-grid">
+                        <div class="form-group">
+                            <label for="desde">Desde</label>
+                            <input id="desde" class="input" type="date" value="2026-05-01">
+                        </div>
+                        <div class="form-group">
+                            <label for="hasta">Hasta</label>
+                            <input id="hasta" class="input" type="date" value="2026-05-31">
+                        </div>
+                        <div class="form-group">
+                            <label style="visibility:hidden;">Generar</label>
+                            <button type="submit" class="btn-primary">Generar reporte</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Métricas -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-azul">📅</div>
+                    </div>
+                    <div class="stat-value">47</div>
+                    <div class="stat-label">Total reservas</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-dorado">💰</div>
+                    </div>
+                    <div class="stat-value">\$3.2M</div>
+                    <div class="stat-label">Ingresos</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-verde">🏨</div>
+                    </div>
+                    <div class="stat-value">82%</div>
+                    <div class="stat-label">Ocupación</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon icon-ambar">⭐</div>
+                    </div>
+                    <div class="stat-value">4.3</div>
+                    <div class="stat-label">Satisfacción</div>
+                </div>
+            </section>
+
+            <!-- Reportes -->
+            <section class="reports-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Reservas por tipo de habitación</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="bar-list">
+                            <div class="bar-row">
+                                <div class="bar-label">Turista</div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: 70%;"></div>
+                                </div>
+                                <div class="bar-value">33</div>
+                            </div>
+
+                            <div class="bar-row">
+                                <div class="bar-label">Premium</div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: 35%;"></div>
+                                </div>
+                                <div class="bar-value">14</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Ocupación semanal</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="bar-list">
+                            <div class="bar-row">
+                                <div class="bar-label">Semana 1</div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: 78%;"></div>
+                                </div>
+                                <div class="bar-value">78%</div>
+                            </div>
+
+                            <div class="bar-row">
+                                <div class="bar-label">Semana 2</div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: 85%;"></div>
+                                </div>
+                                <div class="bar-value">85%</div>
+                            </div>
+
+                            <div class="bar-row">
+                                <div class="bar-label">Semana 3</div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: 92%;"></div>
+                                </div>
+                                <div class="bar-value">92%</div>
+                            </div>
+
+                            <div class="bar-row">
+                                <div class="bar-label">Semana 4</div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: 80%;"></div>
+                                </div>
+                                <div class="bar-value">80%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exportar -->
+            <section class="card export-card">
+                <div class="card-header">
+                    <h3>Exportar reporte</h3>
+                </div>
+                <div class="card-body">
+                    <button class="btn-export">Exportar PDF</button>
+                    <button class="btn-export secondary">Exportar Excel</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

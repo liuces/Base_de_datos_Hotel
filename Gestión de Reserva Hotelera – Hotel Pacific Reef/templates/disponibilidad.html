@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef — Disponibilidad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/disponibilidad.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="nav-brand">🌊 Hotel <span>Pacific Reef</span></div>
+    <div class="nav-links">
+        <a href="/disponibilidad">Habitaciones</a>
+        <a href="/mis-reservas">Mis reservas</a>
+        <a href="/perfil">Mi perfil</a>
+    </div>
+    <div class="nav-user">
+        <div class="avatar">J</div>
+        <span>Juan González</span>
+        <a href="/logout" style="color:rgba(248,246,240,0.5); font-size:0.8rem; margin-left:8px;">Salir</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>Selecciona tus fechas</h1>
+    <p>Bienvenido, Juan — encuentra la habitación perfecta para tu estadía</p>
+
+    <div class="search-bar">
+        <div class="search-field">
+            <label>Entrada</label>
+            <input type="date" id="fechaEntrada" name="fecha_entrada">
+        </div>
+        <div class="search-field">
+            <label>Salida</label>
+            <input type="date" id="fechaSalida" name="fecha_salida">
+        </div>
+        <div class="search-field" style="max-width:120px;">
+            <label>Personas</label>
+            <input type="number" id="personas" name="personas" value="2" min="1" max="4">
+        </div>
+        <button class="btn-buscar" onclick="buscarDisponibilidad()">Buscar</button>
+    </div>
+
+    <div class="leyenda" style="margin-top:14px;">
+        <div class="leyenda-item"><div class="dot dot-sel"></div> Seleccionado</div>
+        <div class="leyenda-item"><div class="dot dot-ocu"></div> Ocupado</div>
+        <div class="leyenda-item"><div class="dot dot-lib"></div> Libre</div>
+    </div>
+</div>
+
+<!-- RESULTADOS -->
+<div class="main">
+    <div class="results-header">
+        <h2>Habitaciones disponibles</h2>
+        <span id="resultCount">Mostrando 3 resultados</span>
+    </div>
+
+    <div class="habitaciones-grid" id="habitacionesGrid">
+
+        <div class="hab-card">
+            <div class="hab-img">🏖️
+                <span class="hab-badge badge-disponible">Disponible</span>
+            </div>
+            <div class="hab-body">
+                <div class="hab-tipo">Turista</div>
+                <div class="hab-nombre">Habitación Turista — 2 pers.</div>
+                <div class="hab-desc">Vista al jardín, cama doble, baño privado. Ideal para parejas.</div>
+                <div class="hab-info">
+                    <span>👥 2 personas</span>
+                    <span>🛏️ Cama doble</span>
+                </div>
+                <div class="hab-footer">
+                    <div class="hab-precio">$45.000 <small>/ noche</small></div>
+                    <a href="/reserva?hab=1" class="btn-reservar">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="hab-card">
+            <div class="hab-img">🌊
+                <span class="hab-badge badge-disponible">Disponible</span>
+            </div>
+            <div class="hab-body">
+                <div class="hab-tipo">Premium</div>
+                <div class="hab-nombre">Habitación Premium — 2 pers.</div>
+                <div class="hab-desc">Vista al mar, cama king, terraza privada. Experiencia de lujo.</div>
+                <div class="hab-info">
+                    <span>👥 2 personas</span>
+                    <span>🛏️ Cama king</span>
+                </div>
+                <div class="hab-footer">
+                    <div class="hab-precio">$85.000 <small>/ noche</small></div>
+                    <a href="/reserva?hab=3" class="btn-reservar">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="hab-card">
+            <div class="hab-img">✨
+                <span class="hab-badge badge-disponible">Disponible</span>
+            </div>
+            <div class="hab-body">
+                <div class="hab-tipo">Suite</div>
+                <div class="hab-nombre">Suite Presidencial — 4 pers.</div>
+                <div class="hab-desc">Jacuzzi, vista panorámica al mar, sala de estar. La mejor experiencia.</div>
+                <div class="hab-info">
+                    <span>👥 4 personas</span>
+                    <span>🛁 Jacuzzi</span>
+                </div>
+                <div class="hab-footer">
+                    <div class="hab-precio">$150.000 <small>/ noche</small></div>
+                    <a href="/reserva?hab=5" class="btn-reservar">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="hab-card">
+            <div class="hab-img" style="opacity:0.6;">🏨
+                <span class="hab-badge badge-ocupada">Ocupada</span>
+            </div>
+            <div class="hab-body">
+                <div class="hab-tipo">Premium</div>
+                <div class="hab-nombre">Habitación Premium 302</div>
+                <div class="hab-desc">Vista al mar, cama king. No disponible para las fechas seleccionadas.</div>
+                <div class="hab-info">
+                    <span>👥 2 personas</span>
+                    <span>🛏️ Cama king</span>
+                </div>
+                <div class="hab-footer">
+                    <div class="hab-precio">$85.000 <small>/ noche</small></div>
+                    <button class="btn-reservar disabled" disabled>No disponible</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="../static/js/disponibilidad.js"></script>
+
+</body>
+</html>

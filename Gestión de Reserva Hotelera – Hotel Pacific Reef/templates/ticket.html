@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef — Ticket de reserva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/ticket.css">
+</head>
+<body>
+
+    <div class="ticket-wrapper">
+        <div class="ticket-card">
+
+            <div class="ticket-header">
+                <div class="hotel-icon">🌊</div>
+                <h1>Confirmación de reserva</h1>
+                <p>Hotel Pacific Reef</p>
+            </div>
+
+            <div class="ticket-body">
+
+                <div class="status-box">
+                    <div class="status-badge">Reserva confirmada</div>
+                    <p>Se envió la confirmación a <strong>juan@mail.com</strong></p>
+                </div>
+
+                <div class="section-title">Código QR de acceso</div>
+                <div class="qr-section">
+                    <div class="qr-box" aria-label="Código QR de reserva"></div>
+                    <div class="qr-caption">Mostrar al llegar al hotel</div>
+                </div>
+
+                <div class="section-title">Detalle de reserva</div>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Reserva N°:</span>
+                        <span class="detail-value">RES-00247</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Cliente:</span>
+                        <span class="detail-value">Juan González</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Habitación:</span>
+                        <span class="detail-value">Premium 302</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Check-in:</span>
+                        <span class="detail-value">15/05/2026</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Check-out:</span>
+                        <span class="detail-value">18/05/2026</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Monto pagado:</span>
+                        <span class="detail-value">\$76.500</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a href="/ticket/pdf/247" class="btn btn-primary">Descargar PDF</a>
+                    <a href="/" class="btn btn-secondary">Volver al inicio</a>
+                </div>
+
+                <div class="footer-note">
+                    Presenta este ticket al momento del check-in.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

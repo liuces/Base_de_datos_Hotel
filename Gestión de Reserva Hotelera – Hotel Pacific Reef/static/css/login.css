@@ -1,0 +1,328 @@
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+        --azul:      #1a3a5c;
+        --azul-med:  #1e4976;
+        --dorado:    #c9a84c;
+        --dorado-cl: #e8c96d;
+        --blanco:    #f8f6f0;
+        --gris:      #6b7280;
+        --error:     #dc2626;
+    }
+
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: var(--azul);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    /* Fondo con olas decorativas */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 80% 60% at 20% 80%, rgba(201,168,76,0.08) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 80% at 80% 20%, rgba(30,73,118,0.6) 0%, transparent 60%);
+        pointer-events: none;
+    }
+
+    .page-wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 960px;
+        min-height: 560px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+        margin: 20px;
+        animation: fadeUp 0.6s ease both;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Panel izquierdo — branding */
+    .brand-panel {
+        flex: 1;
+        background: linear-gradient(160deg, var(--azul-med) 0%, #0f2a45 100%);
+        padding: 50px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .brand-panel::after {
+        content: '';
+        position: absolute;
+        bottom: -60px;
+        right: -60px;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        border: 40px solid rgba(201,168,76,0.08);
+    }
+
+    .brand-panel::before {
+        content: '';
+        position: absolute;
+        top: -40px;
+        left: -40px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 30px solid rgba(201,168,76,0.05);
+    }
+
+    .brand-logo {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .brand-logo .wave-icon {
+        font-size: 2rem;
+        margin-bottom: 4px;
+    }
+
+    .brand-logo h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.7rem;
+        color: var(--blanco);
+        line-height: 1.2;
+    }
+
+    .brand-logo span {
+        color: var(--dorado);
+    }
+
+    .brand-logo p {
+        font-size: 0.8rem;
+        color: rgba(248,246,240,0.5);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-top: 4px;
+    }
+
+    .brand-features {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: rgba(248,246,240,0.75);
+        font-size: 0.88rem;
+    }
+
+    .feature-item .icon {
+        width: 36px;
+        height: 36px;
+        background: rgba(201,168,76,0.15);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .brand-footer {
+        font-size: 0.75rem;
+        color: rgba(248,246,240,0.3);
+    }
+
+    /* Panel derecho — formulario */
+    .form-panel {
+        flex: 1;
+        background: var(--blanco);
+        padding: 50px 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .form-header {
+        margin-bottom: 32px;
+    }
+
+    .form-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: var(--azul);
+        margin-bottom: 6px;
+    }
+
+    .form-header p {
+        font-size: 0.88rem;
+        color: var(--gris);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--azul);
+        margin-bottom: 7px;
+        letter-spacing: 0.3px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1.5px solid #d1d5db;
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.92rem;
+        color: #1f2937;
+        background: #fff;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        outline: none;
+    }
+
+    .form-group input:focus {
+        border-color: var(--azul-med);
+        box-shadow: 0 0 0 3px rgba(30,73,118,0.1);
+    }
+
+    .form-group input::placeholder {
+        color: #9ca3af;
+    }
+
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        font-size: 0.83rem;
+    }
+
+    .form-options label {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--gris);
+        cursor: pointer;
+    }
+
+    .form-options input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--azul-med);
+    }
+
+    .form-options a {
+        color: var(--azul-med);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .form-options a:hover { text-decoration: underline; }
+
+    .btn-login {
+        width: 100%;
+        padding: 13px;
+        background: var(--azul);
+        color: var(--blanco);
+        border: none;
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        letter-spacing: 0.3px;
+    }
+
+    .btn-login:hover {
+        background: var(--azul-med);
+        transform: translateY(-1px);
+    }
+
+    .btn-login:active { transform: translateY(0); }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 22px 0;
+        color: #d1d5db;
+        font-size: 0.8rem;
+    }
+
+    .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e5e7eb;
+    }
+
+    .btn-register {
+        width: 100%;
+        padding: 12px;
+        background: transparent;
+        color: var(--azul);
+        border: 1.5px solid var(--azul);
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.92rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+        text-decoration: none;
+        display: block;
+    }
+
+    .btn-register:hover {
+        background: var(--azul);
+        color: var(--blanco);
+    }
+
+    .empleado-link {
+        text-align: center;
+        margin-top: 16px;
+        font-size: 0.82rem;
+        color: var(--gris);
+    }
+
+    .empleado-link a {
+        color: var(--azul-med);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .empleado-link a:hover { text-decoration: underline; }
+
+    .error-msg {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: var(--error);
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 0.83rem;
+        margin-bottom: 16px;
+        display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .brand-panel { display: none; }
+        .form-panel { padding: 40px 28px; }
+        .page-wrapper { margin: 0; border-radius: 0; min-height: 100vh; }
+    }

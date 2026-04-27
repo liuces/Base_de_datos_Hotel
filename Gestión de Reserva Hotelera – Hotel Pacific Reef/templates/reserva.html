@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef — Reservar y Pagar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/reserva.css">
+</head>
+<body>
+
+<nav>
+    <div class="nav-brand">🌊 Hotel <span>Pacific Reef</span></div>
+    <a href="/disponibilidad" class="nav-back">← Volver a disponibilidad</a>
+</nav>
+
+<div class="main">
+
+    <!-- Panel pago -->
+    <div class="pago-panel">
+        <h2 class="panel-title">Reservar habitación</h2>
+
+        <div class="section-label">Método de pago</div>
+        <div class="metodo-pago">
+            <div class="metodo-item">
+                <input type="radio" name="metodo" id="tarjeta" value="tarjeta_credito" checked>
+                <label for="tarjeta">💳 Tarjeta de crédito/débito</label>
+            </div>
+            <div class="metodo-item">
+                <input type="radio" name="metodo" id="transferencia" value="transferencia">
+                <label for="transferencia">🏦 Transferencia bancaria</label>
+            </div>
+        </div>
+
+        <div id="datosTarjeta">
+            <div class="section-label">Datos de la tarjeta</div>
+            <div class="form-group">
+                <label>N° de tarjeta</label>
+                <input type="text" placeholder="**** **** **** 4321" maxlength="19" id="numTarjeta">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Vencimiento</label>
+                    <input type="text" placeholder="MM/AA" maxlength="5" id="vencimiento">
+                </div>
+                <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" placeholder="•••" maxlength="3" id="cvv">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Nombre en la tarjeta</label>
+                <input type="text" placeholder="JUAN GONZALEZ">
+            </div>
+        </div>
+
+        <form id="reservaForm" action="/confirmar-reserva" method="POST">
+            <input type="hidden" name="id_habitacion" value="3">
+            <input type="hidden" name="fecha_entrada" id="hFechaEntrada">
+            <input type="hidden" name="fecha_salida" id="hFechaSalida">
+            <input type="hidden" name="metodo_pago" id="hMetodo">
+
+            <button type="submit" class="btn-pagar" onclick="confirmarPago(event)">Confirmar y pagar</button>
+            <button type="button" class="btn-cancelar" onclick="history.back()">Cancelar</button>
+        </form>
+    </div>
+
+    <!-- Panel resumen -->
+    <div class="resumen-panel">
+        <div class="resumen-card">
+            <div class="resumen-title">Resumen de reserva</div>
+
+            <div class="resumen-hab">
+                <div class="icon">🌊</div>
+                <div class="info">
+                    <h3>Habitación Premium</h3>
+                    <p>Hotel Pacific Reef</p>
+                </div>
+            </div>
+
+            <div class="resumen-detalle">
+                <div class="detalle-row"><span>Habitación</span><span>Premium</span></div>
+                <div class="detalle-row"><span>Entrada</span><span id="fechaEntradaShow">15/05/2026</span></div>
+                <div class="detalle-row"><span>Salida</span><span id="fechaSalidaShow">18/05/2026</span></div>
+                <div class="detalle-row"><span>Noches</span><span id="nochesShow">3</span></div>
+                <div class="detalle-row"><span>Personas</span><span>2</span></div>
+                <div class="detalle-row"><span>Valor noche</span><span>$85.000</span></div>
+                <div class="detalle-row" style="padding-top:10px; border-top:1px solid #e5e7eb; font-weight:600;">
+                    <span style="color:#1f2937;">Total estadía</span>
+                    <span id="totalShow" style="color:var(--azul);">$255.000</span>
+                </div>
+            </div>
+
+            <div class="total-box">
+                <div>
+                    <div class="label">TOTAL A PAGAR (30%)</div>
+                </div>
+                <div class="amount" id="totalPagarShow">$76.500</div>
+            </div>
+            <div class="total-note">El 70% restante se paga al llegar al hotel</div>
+        </div>
+    </div>
+
+</div>
+
+<script src="../static/js/reserva.js"></script>
+
+</body>
+</html>

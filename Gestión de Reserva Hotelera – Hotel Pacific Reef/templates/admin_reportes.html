@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef — Reportes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/admin_reportes.css">
+</head>
+<body>
+
+<!-- ── SIDEBAR ──────────────────────────────────── -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="wave">🌊</div>
+        <h2>Hotel <span>Pacific Reef</span></h2>
+        <p>Panel de administración</p>
+    </div>
+
+    <nav class="sidebar-nav">
+        <span class="nav-section-label">Principal</span>
+        <a href="/admin/dashboard" class="nav-item">
+            <span class="nav-icon">📊</span> Dashboard
+        </a>
+
+        <span class="nav-section-label">Gestión</span>
+        <a href="/admin/reservas" class="nav-item">
+            <span class="nav-icon">📅</span> Reservas
+        </a>
+        <a href="/admin/usuarios" class="nav-item">
+            <span class="nav-icon">👥</span> Usuarios
+        </a>
+        <a href="/admin/catalogo" class="nav-item">
+            <span class="nav-icon">🏨</span> Catálogo
+        </a>
+        <a href="/admin/precios" class="nav-item">
+            <span class="nav-icon">💲</span> Precios
+        </a>
+
+        <span class="nav-section-label">Análisis</span>
+        <a href="/admin/reportes" class="nav-item active">
+            <span class="nav-icon">📈</span> Reportes
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="sidebar-user">
+            <div class="avatar">A</div>
+            <div class="user-info">
+                <p>Administrador</p>
+                <span>admin@pacificreef.cl</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ── MAIN ──────────────────────────────────────── -->
+<div class="main-wrapper">
+
+    <div class="topbar">
+        <div class="topbar-left">
+            <h1>Reportes</h1>
+            <p>Análisis de ocupación, ingresos y satisfacción</p>
+        </div>
+        <div class="topbar-right">
+            <a href="/admin/dashboard">Dashboard</a>
+            <div class="topbar-divider"></div>
+            <a href="/logout" class="logout">Salir</a>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- ── FILTRO PERIODO ────────────────────── -->
+        <div class="section-header">
+            <div>
+                <h2>Generar reporte</h2>
+                <p>Selecciona el período y tipo de reporte a visualizar</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 22px;">
+            <div class="card-body">
+                <div class="filtro-bar">
+                    <div class="filtro-field">
+                        <label>Desde</label>
+                        <input type="date" id="fechaDesde" value="2026-05-01">
+                    </div>
+                    <div class="filtro-field">
+                        <label>Hasta</label>
+                        <input type="date" id="fechaHasta" value="2026-05-31">
+                    </div>
+                    <div class="filtro-field">
+                        <label>Tipo de reporte</label>
+                        <select id="tipoReporte">
+                            <option value="general">General</option>
+                            <option value="ocupacion">Ocupación</option>
+                            <option value="ingresos">Ingresos</option>
+                            <option value="satisfaccion">Satisfacción</option>
+                        </select>
+                    </div>
+                    <div class="filtro-field">
+                        <label>Tipo habitación</label>
+                        <select id="tipoHab">
+                            <option value="">Todas</option>
+                            <option value="turista">Turista</option>
+                            <option value="premium">Premium</option>
+                            <option value="suite">Suite</option>
+                        </select>
+                    </div>
+                    <button class="btn-generar" onclick="generarReporte()">
+                        📊 Generar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── STAT CARDS ────────────────────────── -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon icon-azul">📋</div>
+                <div class="stat-value" id="statReservas">47</div>
+                <div class="stat-label">Total reservas</div>
+                <div class="stat-trend trend-up">↑ 12% vs período anterior</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon icon-verde">💰</div>
+                <div class="stat-value" id="statIngresos">\$3.2M</div>
+                <div class="stat-label">Ingresos totales</div>
+                <div class="stat-trend trend-up">↑ 8% vs período anterior</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon icon-dorado">📊</div>
+                <div class="stat-value" id="statOcupacion">82%</div>
+                <div class="stat-label">Ocupación promedio</div>
+                <div class="stat-trend trend-up">↑ 5% vs período anterior</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon icon-indigo">⭐</div>
+                <div class="stat-value" id="statSatisfaccion">4.3</div>
+                <div class="stat-label">Satisfacción clientes</div>
+                <div class="stat-trend trend-neu">— Sin variación</div>
+            </div>
+        </div>
+
+        <!-- ── GRÁFICOS ──────────────────────────── -->
+        <div class="charts-grid">
+
+            <!-- Reservas por tipo habitación -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Reservas por tipo de habitación</h3>
+                    <span style="font-size:0.78rem; color:var(--gris);">Mayo 2026</span>
+                </div>
+                <div class="card-body">
+                    <div class="bar-list" id="barTipos">
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">🏖️ Turista</span>
+                                <span class="bar-value">33 reservas</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width:0%" data-width="70%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">🌊 Premium</span>
+                                <span class="bar-value">14 reservas</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill dorado" style="width:0%" data-width="30%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">✨ Suite</span>
+                                <span class="bar-value">6 reservas</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill indigo" style="width:0%" data-width="13%"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ingresos por tipo -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Ingresos por tipo de habitación</h3>
+                    <span style="font-size:0.78rem; color:var(--gris);">Mayo 2026</span>
+                </div>
+                <div class="card-body">
+                    <div class="bar-list">
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">🏖️ Turista</span>
+                                <span class="bar-value">\$1.485.000</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill verde" style="width:0%" data-width="46%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">🌊 Premium</span>
+                                <span class="bar-value">\$1.190.000</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width:0%" data-width="37%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">✨ Suite</span>
+                                <span class="bar-value">\$540.000</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill dorado" style="width:0%" data-width="17%"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ocupación semanal -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Ocupación semanal</h3>
+                    <span style="font-size:0.78rem; color:var(--gris);">Mayo 2026</span>
+                </div>
+                <div class="card-body">
+                    <div class="chart-vertical" id="chartVertical">
+
+                        <div class="vert-bar-wrap">
+                            <span class="vert-bar-pct">78%</span>
+                            <div class="vert-bar-track" style="height:0px" data-height="140px"></div>
+                            <span class="vert-bar-label">Sem 1</span>
+                        </div>
+
+                        <div class="vert-bar-wrap">
+                            <span class="vert-bar-pct">85%</span>
+                            <div class="vert-bar-track" style="height:0px" data-height="153px"></div>
+                            <span class="vert-bar-label">Sem 2</span>
+                        </div>
+
+                        <div class="vert-bar-wrap">
+                            <span class="vert-bar-pct">92%</span>
+                            <div class="vert-bar-track" style="height:0px" data-height="166px"></div>
+                            <span class="vert-bar-label">Sem 3</span>
+                        </div>
+
+                        <div class="vert-bar-wrap">
+                            <span class="vert-bar-pct">68%</span>
+                            <div class="vert-bar-track dorado" style="height:0px" data-height="122px"></div>
+                            <span class="vert-bar-label">Sem 4</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Satisfacción -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Satisfacción por categoría</h3>
+                    <span style="font-size:0.78rem; color:var(--gris);">Mayo 2026</span>
+                </div>
+                <div class="card-body">
+                    <div class="bar-list">
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">🛏️ Comodidad</span>
+                                <span class="bar-value">4.6 / 5</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill verde" style="width:0%" data-width="92%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">🍽️ Servicio</span>
+                                <span class="bar-value">4.4 / 5</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width:0%" data-width="88%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">📍 Ubicación</span>
+                                <span class="bar-value">4.8 / 5</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill dorado" style="width:0%" data-width="96%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bar-item">
+                            <div class="bar-meta">
+                                <span class="bar-label">💲 Precio/valor</span>
+                                <span class="bar-value">3.9 / 5</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill indigo" style="width:0%" data-width="78%"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ── TABLA DETALLE RESERVAS ────────────── -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Detalle de reservas del período</h3>
+                <span style="font-size:0.78rem; color:var(--gris);">47 reservas en total</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>N° Reserva</th>
+                        <th>Cliente</th>
+                        <th>Habitación</th>
+                        <th>Tipo</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Noches</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="td-bold">RES-00247</td>
+                        <td>Juan González</td>
+                        <td>302</td>
+                        <td><span class="badge badge-premium">Premium</span></td>
+                        <td>15/05/2026</td>
+                        <td>18/05/2026</td>
+                        <td>3</td>
+                        <td class="td-bold">\$255.000</td>
+                    </tr>
+                    <tr>
+                        <td class="td-bold">RES-00246</td>
+                        <td>María Torres</td>
+                        <td>201</td>
+                        <td><span class="badge badge-turista">Turista</span></td>
+                        <td>16/05/2026</td>
+                        <td>19/05/2026</td>
+                        <td>3</td>
+                        <td class="td-bold">\$135.000</td>
+                    </tr>
+                    <tr>
+                        <td class="td-bold">RES-00245</td>
+                        <td>Ana Pérez</td>
+                        <td>105</td>
+                        <td><span class="badge badge-turista">Turista</span></td>
+                        <td>17/05/2026</td>
+                        <td>20/05/2026</td>
+                        <td>3</td>
+                        <td class="td-bold">\$135.000</td>
+                    </tr>
+                    <tr>
+                        <td class="td-bold">RES-00244</td>
+                        <td>Roberto Muñoz</td>
+                        <td>310</td>
+                        <td><span class="badge badge-premium">Premium</span></td>
+                        <td>18/05/2026</td>
+                        <td>21/05/2026</td>
+                        <td>3</td>
+                        <td class="td-bold">\$255.000</td>
+                    </tr>
+                    <tr>
+                        <td class="td-bold">RES-00243</td>
+                        <td>Claudia Vega</td>
+                        <td>208</td>
+                        <td><span class="badge badge-suite">Suite</span></td>
+                        <td>19/05/2026</td>
+                        <td>23/05/2026</td>
+                        <td>4</td>
+                        <td class="td-bold">\$600.000</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="padding: 14px 24px; background: #f9fafb; border-top: 1px solid #f3f4f6; display: flex; justify-content: flex-end; gap: 32px;">
+                <span style="font-size:0.85rem; color:var(--gris);">Mostrando 5 de 47 reservas</span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--azul);">Total período: \$3.215.000</span>
+            </div>
+        </div>
+
+        <!-- ── EXPORTAR ───────────────────────────── -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Exportar reporte</h3>
+            </div>
+            <div class="card-body">
+                <div class="export-bar">
+                    <button class="btn-export btn-export-pdf" onclick="exportar('PDF')">
+                        📄 Exportar PDF
+                    </button>
+                    <button class="btn-export btn-export-excel" onclick="exportar('Excel')">
+                        📊 Exportar Excel
+                    </button>
+                    <button class="btn-export btn-export-csv" onclick="exportar('CSV')">
+                        📁 Exportar CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ── LOADING ────────────────────────────────────── -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+</div>
+
+<!-- ── TOAST ──────────────────────────────────────── -->
+<div class="toast" id="toast">
+    <span id="toastIcon">✅</span>
+    <span id="toastMsg">Reporte generado correctamente.</span>
+</div>
+
+<script src="../static/js/admin_reportes.js"></script>
+
+</body>
+</html>

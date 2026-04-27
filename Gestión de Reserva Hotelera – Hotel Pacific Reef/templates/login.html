@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef — Iniciar Sesión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/login.css">
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <!-- Panel izquierdo -->
+    <div class="brand-panel">
+        <div class="brand-logo">
+            <div class="wave-icon">🌊</div>
+            <h1>Hotel<br><span>Pacific Reef</span></h1>
+            <p>Sistema de Reservas</p>
+        </div>
+
+        <div class="brand-features">
+            <div class="feature-item">
+                <div class="icon">🏨</div>
+                <span>Reserva tu habitación en minutos</span>
+            </div>
+            <div class="feature-item">
+                <div class="icon">📅</div>
+                <span>Consulta disponibilidad en tiempo real</span>
+            </div>
+            <div class="feature-item">
+                <div class="icon">📱</div>
+                <span>Recibe tu ticket QR de confirmación</span>
+            </div>
+            <div class="feature-item">
+                <div class="icon">🔒</div>
+                <span>Tus datos siempre seguros</span>
+            </div>
+        </div>
+
+        <div class="brand-footer">
+            © 2026 Hotel Pacific Reef — Todos los derechos reservados
+        </div>
+    </div>
+
+    <!-- Panel derecho — Formulario -->
+    <div class="form-panel">
+        <div class="form-header">
+            <h2>Bienvenido</h2>
+            <p>Ingresa tus credenciales para continuar</p>
+        </div>
+
+        <div class="error-msg" id="errorMsg">
+            Correo o contraseña incorrectos. Intenta nuevamente.
+        </div>
+
+        <form id="loginForm" action="/login" method="POST" onsubmit="validarLogin(event)">
+
+            <div class="form-group">
+                <label for="correo">Correo electrónico</label>
+                <input
+                    type="email"
+                    id="correo"
+                    name="correo"
+                    placeholder="usuario@correo.com"
+                    required
+                    autocomplete="email"
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••"
+                    required
+                    autocomplete="current-password"
+                />
+            </div>
+
+            <div class="form-options">
+                <label>
+                    <input type="checkbox" name="recordar"> Recordarme
+                </label>
+                <a href="/recuperar">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <button type="submit" class="btn-login">Iniciar sesión</button>
+        </form>
+
+        <div class="divider">o</div>
+
+        <a href="/registro" class="btn-register">Crear cuenta nueva</a>
+
+        <div class="empleado-link">
+            <a href="/login?rol=empleado">¿Eres empleado? Accede aquí</a>
+        </div>
+    </div>
+
+</div>
+
+<script src="../static/js/login.js"></script>
+
+</body>
+</html>

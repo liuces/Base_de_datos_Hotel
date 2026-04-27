@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef — Panel Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/admin_dashboard.css">
+</head>
+<body>
+
+<!-- ── SIDEBAR ──────────────────────────────────── -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="wave">🌊</div>
+        <h2>Hotel <span>Pacific Reef</span></h2>
+        <p>Panel de administración</p>
+    </div>
+
+    <nav class="sidebar-nav">
+        <span class="nav-section-label">Principal</span>
+        <a href="/admin/dashboard" class="nav-item active">
+            <span class="nav-icon">📊</span> Dashboard
+        </a>
+
+        <span class="nav-section-label">Gestión</span>
+        <a href="/admin/reservas" class="nav-item">
+            <span class="nav-icon">📅</span> Reservas
+        </a>
+        <a href="/admin/usuarios" class="nav-item">
+            <span class="nav-icon">👥</span> Usuarios
+        </a>
+        <a href="/admin/catalogo" class="nav-item">
+            <span class="nav-icon">🏨</span> Catálogo
+        </a>
+        <a href="/admin/precios" class="nav-item">
+            <span class="nav-icon">💲</span> Precios
+        </a>
+
+        <span class="nav-section-label">Análisis</span>
+        <a href="/admin/reportes" class="nav-item">
+            <span class="nav-icon">📈</span> Reportes
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="sidebar-user">
+            <div class="avatar">A</div>
+            <div class="user-info">
+                <p>Administrador</p>
+                <span>admin@pacificreef.cl</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ── MAIN ──────────────────────────────────────── -->
+<div class="main-wrapper">
+
+    <!-- Top bar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <h1>Panel Admin</h1>
+            <p>Lunes, 27 de abril de 2026</p>
+        </div>
+        <div class="topbar-right">
+            <a href="/admin/reservas">Reservas</a>
+            <div class="topbar-divider"></div>
+            <a href="/logout" class="logout">Salir</a>
+        </div>
+    </div>
+
+    <!-- Contenido -->
+    <div class="content">
+
+        <div class="content-header">
+            <h2>Resumen de hoy</h2>
+            <p>Vista general del estado del hotel en tiempo real</p>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon icon-azul">📅</div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Reservas activas</div>
+                <div class="stat-trend trend-up">↑ 3 más que ayer</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon icon-verde">✅</div>
+                <div class="stat-value">3</div>
+                <div class="stat-label">Check-in hoy</div>
+                <div class="stat-trend trend-neu">— Sin cambios</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon icon-ambar">🚪</div>
+                <div class="stat-value">2</div>
+                <div class="stat-label">Check-out hoy</div>
+                <div class="stat-trend trend-down">↓ 1 menos que ayer</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon icon-dorado">📊</div>
+                <div class="stat-value">85%</div>
+                <div class="stat-label">Ocupación</div>
+                <div class="stat-trend trend-up">↑ 5% vs semana pasada</div>
+            </div>
+        </div>
+
+        <!-- Grid inferior -->
+        <div class="bottom-grid">
+
+            <!-- Tabla últimas reservas -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Últimas reservas</h3>
+                    <a href="/admin/reservas">Ver todas →</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Habitación</th>
+                            <th>Entrada</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="td-id">#247</td>
+                            <td>J. González</td>
+                            <td>Premium 302</td>
+                            <td>15/05/2026</td>
+                            <td><span class="badge badge-confirmada">Confirmada</span></td>
+                            <td>
+                                <a href="/admin/reservas/247" class="btn-accion">Ver</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-id">#246</td>
+                            <td>M. Torres</td>
+                            <td>Turista 201</td>
+                            <td>16/05/2026</td>
+                            <td><span class="badge badge-confirmada">Confirmada</span></td>
+                            <td>
+                                <a href="/admin/reservas/246" class="btn-accion">Ver</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-id">#245</td>
+                            <td>A. Pérez</td>
+                            <td>Turista 105</td>
+                            <td>17/05/2026</td>
+                            <td><span class="badge badge-pendiente">Pendiente</span></td>
+                            <td>
+                                <a href="/admin/reservas/245" class="btn-accion">Ver</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-id">#244</td>
+                            <td>R. Muñoz</td>
+                            <td>Premium 310</td>
+                            <td>18/05/2026</td>
+                            <td><span class="badge badge-confirmada">Confirmada</span></td>
+                            <td>
+                                <a href="/admin/reservas/244" class="btn-accion">Ver</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-id">#243</td>
+                            <td>C. Vega</td>
+                            <td>Suite 208</td>
+                            <td>19/05/2026</td>
+                            <td><span class="badge badge-pendiente">Pendiente</span></td>
+                            <td>
+                                <a href="/admin/reservas/243" class="btn-accion">Ver</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Panel lateral -->
+            <div class="side-cards">
+
+                <!-- Ocupación visual -->
+                <div class="card ocupacion-card">
+                    <div class="oc-title">Ocupación actual</div>
+                    <div class="oc-ring-wrapper">
+                        <div class="oc-ring">
+                            <svg viewBox="0 0 90 90" width="90" height="90">
+                                <circle class="ring-bg" cx="45" cy="45" r="35"/>
+                                <circle class="ring-fill" cx="45" cy="45" r="35"/>
+                            </svg>
+                            <div class="ring-label">
+                                <span>85%</span>
+                                <small>ocupado</small>
+                            </div>
+                        </div>
+                        <div class="oc-detalle">
+                            <div class="oc-detalle-item">
+                                <span>Habitaciones totales</span>
+                                <span>20</span>
+                            </div>
+                            <div class="oc-detalle-item">
+                                <span>Ocupadas</span>
+                                <span>17</span>
+                            </div>
+                            <div class="oc-detalle-item">
+                                <span>Disponibles</span>
+                                <span>3</span>
+                            </div>
+                            <div class="oc-detalle-item">
+                                <span>Mantenimiento</span>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones rápidas -->
+                <div class="card quick-card">
+                    <div class="q-title">Acciones rápidas</div>
+                    <div class="quick-actions">
+                        <a href="/admin/reservas/nueva" class="quick-btn">
+                            <div class="q-icon">➕</div>
+                            Nueva reserva
+                        </a>
+                        <a href="/admin/usuarios" class="quick-btn">
+                            <div class="q-icon">👤</div>
+                            Gestionar usuarios
+                        </a>
+                        <a href="/admin/catalogo" class="quick-btn">
+                            <div class="q-icon">🏨</div>
+                            Actualizar catálogo
+                        </a>
+                        <a href="/admin/reportes" class="quick-btn">
+                            <div class="q-icon">📈</div>
+                            Generar reporte
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
