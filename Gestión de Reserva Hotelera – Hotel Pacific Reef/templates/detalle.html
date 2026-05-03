@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef — Detalle Habitación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/detalle.css">
+</head>
+<body>
+
+<nav>
+    <div class="nav-brand">🌊 Hotel <span>Pacific Reef</span></div>
+    <a href="/disponibilidad" class="nav-back">← Volver a disponibilidad</a>
+</nav>
+
+<div class="main">
+    <div class="detalle-card">
+
+        <!-- Hero -->
+        <div class="detalle-hero">
+            <div class="icon">
+                {% if habitacion.tipo_habitacion == 'Suite' %}✨
+                {% elif habitacion.tipo_habitacion == 'Premium' %}🌊
+                {% else %}🏖️{% endif %}
+            </div>
+            <div class="info">
+                <h1>Habitación {{ habitacion.tipo_habitacion }} {{ habitacion.numero_habitacion }}</h1>
+                <p>Hotel Pacific Reef — Viña del Mar</p>
+                <span class="badge {% if habitacion.estado_habitacion == 'disponible' %}badge-disponible{% else %}badge-ocupada{% endif %}">
+                    {{ habitacion.estado_habitacion|capitalize }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="detalle-body">
+
+            <!-- Info izquierda -->
+            <div class="detalle-info">
+                <h2>Características</h2>
+                <div class="caracteristicas">
+                    <div class="carac-item">
+                        <div class="icon">👥</div>
+                        <div class="text">
+                            <strong>Capacidad</strong>
+                            <span>{{ habitacion.capacidad_habitacion }} personas</span>
+                        </div>
+                    </div>
+                    <div class="carac-item">
+                        <div class="icon">🏷️</div>
+                        <div class="text">
+                            <strong>Tipo</strong>
+                            <span>{{ habitacion.tipo_habitacion }}</span>
+                        </div>
+                    </div>
+                    <div class="carac-item">
+                        <div class="icon">🔢</div>
+                        <div class="text">
+                            <strong>Número</strong>
+                            <span>Habitación {{ habitacion.numero_habitacion }}</span>
+                        </div>
+                    </div>
+                    <div class="carac-item">
+                        <div class="icon">📌</div>
+                        <div class="text">
+                            <strong>Estado</strong>
+                            <span>{{ habitacion.estado_habitacion|capitalize }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Descripción</h2>
+                <p class="descripcion">{{ habitacion.descripcion }}</p>
+
+                <div class="politicas">
+                    <h3>Políticas del hotel</h3>
+                    <div class="politica-item">✅ Check-in desde las 14:00 hrs</div>
+                    <div class="politica-item">✅ Check-out hasta las 12:00 hrs</div>
+                    <div class="politica-item">✅ Se requiere pago del 30% al reservar</div>
+                    <div class="politica-item">✅ El 70% restante se paga al llegar</div>
+                    <div class="politica-item">❌ No se permiten mascotas</div>
+                    <div class="politica-item">❌ No se permite fumar en habitaciones</div>
+                </div>
+            </div>
+
+            <!-- Panel reserva derecha -->
+            <div class="reserva-panel">
+                <div class="precio-card">
+                    <div class="precio">${{ "{:,.0f}".format(habitacion.precio_habitacion) }}<small> / noche</small></div>
+                    <div class="nota">Precio por noche por habitación</div>
+                </div>
+
+                <div class="fechas-card">
+                    <h3>Selecciona tu estadía</h3>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label style="font-size:0.8rem; color:var(--gris); display:block; margin-bottom:4px;">Entrada</label>
+                        <input type="date" id="fechaEntrada" value="{{ fecha_entrada }}"
+                            style="width:100%; padding:9px 12px; border:1.5px solid #d1d5db; border-radius:8px; font-family:'DM Sans',sans-serif;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label style="font-size:0.8rem; color:var(--gris); display:block; margin-bottom:4px;">Salida</label>
+                        <input type="date" id="fechaSalida" value="{{ fecha_salida }}"
+                            style="width:100%; padding:9px 12px; border:1.5px solid #d1d5db; border-radius:8px; font-family:'DM Sans',sans-serif;">
+                    </div>
+                </div>
+
+                {% if habitacion.estado_habitacion == 'disponible' %}
+                <button onclick="irAReserva()" class="btn-reservar-ahora" data-hab="{{ habitacion.id_habitacion }}">Reservar ahora</button>
+                {% else %}
+                <div class="sin-fechas">Esta habitación no está disponible actualmente.</div>
+                {% endif %}
+
+                <a href="/disponibilidad{% if fecha_entrada %}?entrada={{ fecha_entrada }}&salida={{ fecha_salida }}{% endif %}" 
+                   class="btn-volver">← Volver a buscar</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="../static/js/detalle.js"></script>
+
+</body>
+</html>
