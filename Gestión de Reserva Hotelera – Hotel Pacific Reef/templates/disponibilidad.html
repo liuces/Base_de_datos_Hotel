@@ -19,7 +19,7 @@
     </div>
     <div class="nav-user">
         <div class="avatar">J</div>
-        <span>Juan González</span>
+        <span>{{ nombre }}</span>
         <a href="/logout" style="color:rgba(248,246,240,0.5); font-size:0.8rem; margin-left:8px;">Salir</a>
     </div>
 </nav>
@@ -27,20 +27,20 @@
 <!-- HERO -->
 <div class="hero">
     <h1>Selecciona tus fechas</h1>
-    <p>Bienvenido, Juan — encuentra la habitación perfecta para tu estadía</p>
+    <p>Bienvenido, {{ nombre }} — encuentra la habitación perfecta para tu estadía</p>
 
     <div class="search-bar">
         <div class="search-field">
             <label>Entrada</label>
-            <input type="date" id="fechaEntrada" name="fecha_entrada">
+            <input type="date" id="fechaEntrada" name="fecha_entrada" value="{{ fecha_entrada }}">
         </div>
         <div class="search-field">
             <label>Salida</label>
-            <input type="date" id="fechaSalida" name="fecha_salida">
+            <input type="date" id="fechaSalida" name="fecha_salida" value="{{ fecha_salida }}">
         </div>
         <div class="search-field" style="max-width:120px;">
             <label>Personas</label>
-            <input type="number" id="personas" name="personas" value="2" min="1" max="4">
+            <input type="number" id="personas" name="personas" value="{{ personas }}" min="1" max="4">
         </div>
         <button class="btn-buscar" onclick="buscarDisponibilidad()">Buscar</button>
     </div>
@@ -61,81 +61,44 @@
 
     <div class="habitaciones-grid" id="habitacionesGrid">
 
-        <div class="hab-card">
-            <div class="hab-img">🏖️
-                <span class="hab-badge badge-disponible">Disponible</span>
+    {% for hab in habitaciones %}
+    <div class="hab-card">
+        <div class="hab-img">
+            {% if hab.tipo_habitacion == 'Suite' %}✨
+            {% elif hab.tipo_habitacion == 'Premium' %}🌊
+            {% else %}🏖️
+            {% endif %}
+            <span class="hab-badge 
+                {% if hab.estado_habitacion == 'disponible' %}badge-disponible
+                {% else %}badge-ocupada{% endif %}">
+                {{ hab.estado_habitacion|capitalize }}
+            </span>
+        </div>
+        <div class="hab-body">
+            <div class="hab-tipo">{{ hab.tipo_habitacion }}</div>
+            <div class="hab-nombre">Habitación {{ hab.tipo_habitacion }} {{ hab.numero_habitacion }}</div>
+            <div class="hab-desc">{{ hab.descripcion }}</div>
+            <div class="hab-info">
+                <span>👥 {{ hab.capacidad_habitacion }} personas</span>
             </div>
-            <div class="hab-body">
-                <div class="hab-tipo">Turista</div>
-                <div class="hab-nombre">Habitación Turista — 2 pers.</div>
-                <div class="hab-desc">Vista al jardín, cama doble, baño privado. Ideal para parejas.</div>
-                <div class="hab-info">
-                    <span>👥 2 personas</span>
-                    <span>🛏️ Cama doble</span>
-                </div>
-                <div class="hab-footer">
-                    <div class="hab-precio">$45.000 <small>/ noche</small></div>
-                    <a href="/reserva?hab=1" class="btn-reservar">Ver detalles</a>
-                </div>
+            <div class="hab-footer">
+                <div class="hab-precio">${{ "{:,.0f}".format(hab.precio_habitacion) }} <small>/ noche</small></div>
+                {% if hab.estado_habitacion == 'disponible' %}
+                <a href="/detalle?hab={{ hab.id_habitacion }}&entrada={{ fecha_entrada }}&salida={{ fecha_salida }}" 
+                    class="btn-reservar">Ver detalles</a>
+                {% else %}
+                <button class="btn-reservar disabled" disabled>No disponible</button>
+                {% endif %}
             </div>
         </div>
+    </div>
+    {% endfor %}
 
-        <div class="hab-card">
-            <div class="hab-img">🌊
-                <span class="hab-badge badge-disponible">Disponible</span>
-            </div>
-            <div class="hab-body">
-                <div class="hab-tipo">Premium</div>
-                <div class="hab-nombre">Habitación Premium — 2 pers.</div>
-                <div class="hab-desc">Vista al mar, cama king, terraza privada. Experiencia de lujo.</div>
-                <div class="hab-info">
-                    <span>👥 2 personas</span>
-                    <span>🛏️ Cama king</span>
-                </div>
-                <div class="hab-footer">
-                    <div class="hab-precio">$85.000 <small>/ noche</small></div>
-                    <a href="/reserva?hab=3" class="btn-reservar">Ver detalles</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="hab-card">
-            <div class="hab-img">✨
-                <span class="hab-badge badge-disponible">Disponible</span>
-            </div>
-            <div class="hab-body">
-                <div class="hab-tipo">Suite</div>
-                <div class="hab-nombre">Suite Presidencial — 4 pers.</div>
-                <div class="hab-desc">Jacuzzi, vista panorámica al mar, sala de estar. La mejor experiencia.</div>
-                <div class="hab-info">
-                    <span>👥 4 personas</span>
-                    <span>🛁 Jacuzzi</span>
-                </div>
-                <div class="hab-footer">
-                    <div class="hab-precio">$150.000 <small>/ noche</small></div>
-                    <a href="/reserva?hab=5" class="btn-reservar">Ver detalles</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="hab-card">
-            <div class="hab-img" style="opacity:0.6;">🏨
-                <span class="hab-badge badge-ocupada">Ocupada</span>
-            </div>
-            <div class="hab-body">
-                <div class="hab-tipo">Premium</div>
-                <div class="hab-nombre">Habitación Premium 302</div>
-                <div class="hab-desc">Vista al mar, cama king. No disponible para las fechas seleccionadas.</div>
-                <div class="hab-info">
-                    <span>👥 2 personas</span>
-                    <span>🛏️ Cama king</span>
-                </div>
-                <div class="hab-footer">
-                    <div class="hab-precio">$85.000 <small>/ noche</small></div>
-                    <button class="btn-reservar disabled" disabled>No disponible</button>
-                </div>
-            </div>
-        </div>
+    {% if not habitaciones %}
+    <div style="grid-column:1/-1; text-align:center; padding:40px; color:#6b7280;">
+        <p>No hay habitaciones disponibles para las fechas seleccionadas.</p>
+    </div>
+    {% endif %}
 
     </div>
 </div>

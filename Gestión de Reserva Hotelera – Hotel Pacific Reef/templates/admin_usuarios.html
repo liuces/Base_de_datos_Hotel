@@ -19,7 +19,7 @@
 
     <nav class="sidebar-nav">
         <span class="nav-section-label">Principal</span>
-        <a href="/admin/dashboard" class="nav-item">
+        <a href="/admin" class="nav-item">
             <span class="nav-icon">📊</span> Dashboard
         </a>
 
@@ -94,7 +94,7 @@
                     <option value="">Todos los roles</option>
                     <option value="cliente">Cliente</option>
                     <option value="empleado">Empleado</option>
-                    <option value="admin">Admin</option>
+                    <option value="administrador">Admin</option>
                 </select>
                 <button class="btn-nuevo" onclick="abrirModalNuevo()">
                     ＋ Nuevo usuario
@@ -113,76 +113,39 @@
                     </tr>
                 </thead>
                 <tbody id="tbodyUsuarios">
-                    <tr data-nombre="juan gonzalez" data-rol="cliente">
-                        <td class="td-rut">12.345.678-9</td>
-                        <td class="td-name">Juan González</td>
-                        <td>juan@mail.com</td>
-                        <td>+56 9 1234 5678</td>
-                        <td><span class="badge badge-cliente">Cliente</span></td>
+                    {% for u in usuarios %}
+                    <tr data-nombre="{{ u.nombre_usuario }} {{ u.ap_pat_usuario }}" data-rol="{{ u.rol }}">
+                        <td class="td-rut">{{ u.rut_usuario }}</td>
+                        <td class="td-name">{{ u.nombre_usuario }} {{ u.ap_pat_usuario }}</td>
+                        <td>{{ u.correo_usuario }}</td>
+                        <td>{{ u.fono_usuario }}</td>
+
+                        <td>
+                            {% if u.rol == 'cliente' %}
+                                <span class="badge badge-cliente">Cliente</span>
+                            {% elif u.rol == 'empleado' %}
+                                <span class="badge badge-empleado">Empleado</span>
+                            {% else %}
+                                <span class="badge badge-admin">Admin</span>
+                            {% endif %}
+                        </td>
+
                         <td>
                             <div class="td-actions">
                                 <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
-                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '12.345.678-9', 'Juan González')">Eliminar</button>
+                                <button class="btn-accion btn-eliminar"
+                                    onclick="abrirModalEliminar(this, '{{ u.rut_usuario }}', '{{ u.nombre_usuario }} {{ u.ap_pat_usuario }}')">
+                                    Eliminar
+                                </button>
                             </div>
                         </td>
                     </tr>
-                    <tr data-nombre="maria torres" data-rol="cliente">
-                        <td class="td-rut">9.876.543-2</td>
-                        <td class="td-name">María Torres</td>
-                        <td>mtorres@mail.com</td>
-                        <td>+56 9 8765 4321</td>
-                        <td><span class="badge badge-cliente">Cliente</span></td>
-                        <td>
-                            <div class="td-actions">
-                                <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
-                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '9.876.543-2', 'María Torres')">Eliminar</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr data-nombre="carlos rojas" data-rol="empleado">
-                        <td class="td-rut">15.432.100-1</td>
-                        <td class="td-name">Carlos Rojas</td>
-                        <td>crojas@pacificreef.cl</td>
-                        <td>+56 9 5555 1234</td>
-                        <td><span class="badge badge-empleado">Empleado</span></td>
-                        <td>
-                            <div class="td-actions">
-                                <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
-                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '15.432.100-1', 'Carlos Rojas')">Eliminar</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr data-nombre="ana perez" data-rol="cliente">
-                        <td class="td-rut">18.765.432-K</td>
-                        <td class="td-name">Ana Pérez</td>
-                        <td>aperez@mail.com</td>
-                        <td>+56 9 3333 9876</td>
-                        <td><span class="badge badge-cliente">Cliente</span></td>
-                        <td>
-                            <div class="td-actions">
-                                <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
-                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '18.765.432-K', 'Ana Pérez')">Eliminar</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr data-nombre="luis muñoz" data-rol="empleado">
-                        <td class="td-rut">11.222.333-4</td>
-                        <td class="td-name">Luis Muñoz</td>
-                        <td>lmunoz@pacificreef.cl</td>
-                        <td>+56 9 7777 2222</td>
-                        <td><span class="badge badge-empleado">Empleado</span></td>
-                        <td>
-                            <div class="td-actions">
-                                <button class="btn-accion" onclick="abrirModalEditar(this)">Editar</button>
-                                <button class="btn-accion btn-eliminar" onclick="abrirModalEliminar(this, '11.222.333-4', 'Luis Muñoz')">Eliminar</button>
-                            </div>
-                        </td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
 
             <div class="table-footer">
-                <span id="countLabel">Mostrando 5 de 5 usuarios</span>
+                <span id="countLabel">Mostrando {{ usuarios|length }} usuarios</span>
                 <div class="pagination">
                     <button class="page-btn">‹</button>
                     <button class="page-btn active">1</button>

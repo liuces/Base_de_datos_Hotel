@@ -55,10 +55,11 @@
         </div>
 
         <form id="reservaForm" action="/confirmar-reserva" method="POST">
-            <input type="hidden" name="id_habitacion" value="3">
-            <input type="hidden" name="fecha_entrada" id="hFechaEntrada">
-            <input type="hidden" name="fecha_salida" id="hFechaSalida">
-            <input type="hidden" name="metodo_pago" id="hMetodo">
+            <input type="hidden" name="id_habitacion" value="{{ habitacion.id_habitacion }}">
+            <input type="hidden" name="fecha_entrada" value="{{ fecha_entrada }}">
+            <input type="hidden" name="fecha_salida" value="{{ fecha_salida }}">
+            <input type="hidden" name="personas" value="2">
+            <input type="hidden" name="metodo_pago" id="hMetodo" value="tarjeta_credito">
 
             <button type="submit" class="btn-pagar" onclick="confirmarPago(event)">Confirmar y pagar</button>
             <button type="button" class="btn-cancelar" onclick="history.back()">Cancelar</button>
@@ -73,21 +74,21 @@
             <div class="resumen-hab">
                 <div class="icon">🌊</div>
                 <div class="info">
-                    <h3>Habitación Premium</h3>
+                    <h3>Habitación {{ habitacion.tipo_habitacion }} {{ habitacion.numero_habitacion }}</h3>
                     <p>Hotel Pacific Reef</p>
                 </div>
             </div>
 
             <div class="resumen-detalle">
-                <div class="detalle-row"><span>Habitación</span><span>Premium</span></div>
-                <div class="detalle-row"><span>Entrada</span><span id="fechaEntradaShow">15/05/2026</span></div>
-                <div class="detalle-row"><span>Salida</span><span id="fechaSalidaShow">18/05/2026</span></div>
-                <div class="detalle-row"><span>Noches</span><span id="nochesShow">3</span></div>
+                <div class="detalle-row"><span>Habitación</span><span>{{ habitacion.tipo_habitacion }}</span></div>
+                <div class="detalle-row"><span>Entrada</span><span>{{ fecha_entrada }}</span></div>
+                <div class="detalle-row"><span>Salida</span><span>{{ fecha_salida }}</span></div>
+                <div class="detalle-row"><span>Noches</span><span>{{ noches }}</span></div>
                 <div class="detalle-row"><span>Personas</span><span>2</span></div>
-                <div class="detalle-row"><span>Valor noche</span><span>$85.000</span></div>
+                <div class="detalle-row"><span>Valor noche</span><span>${{ "{:,.0f}".format(habitacion.precio_habitacion) }}</span></div>
                 <div class="detalle-row" style="padding-top:10px; border-top:1px solid #e5e7eb; font-weight:600;">
                     <span style="color:#1f2937;">Total estadía</span>
-                    <span id="totalShow" style="color:var(--azul);">$255.000</span>
+                    <span style="color:#1f2937;">${{ "{:,.0f}".format(total) }}</span>
                 </div>
             </div>
 
@@ -95,7 +96,7 @@
                 <div>
                     <div class="label">TOTAL A PAGAR (30%)</div>
                 </div>
-                <div class="amount" id="totalPagarShow">$76.500</div>
+                <div class="amount">${{ "{:,.0f}".format(total_30) }}</div>
             </div>
             <div class="total-note">El 70% restante se paga al llegar al hotel</div>
         </div>

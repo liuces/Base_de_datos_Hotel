@@ -22,47 +22,72 @@
 
                 <div class="status-box">
                     <div class="status-badge">Reserva confirmada</div>
-                    <p>Se envió la confirmación a <strong>juan@mail.com</strong></p>
+                    <p>Se envió la confirmación a <strong>{{ datos.correo_usuario }}</strong></p>
                 </div>
 
                 <div class="section-title">Código QR de acceso</div>
                 <div class="qr-section">
-                    <div class="qr-box" aria-label="Código QR de reserva"></div>
+                    <div class="qr-box" aria-label="Código QR de reserva">
+                        <p style="font-size:0.75rem; color:#6b7280; padding:10px;">{{ datos.codigo_qr }}</p>
+                    </div>
                     <div class="qr-caption">Mostrar al llegar al hotel</div>
                 </div>
 
                 <div class="section-title">Detalle de reserva</div>
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <span class="detail-label">Reserva N°:</span>
-                        <span class="detail-value">RES-00247</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Cliente:</span>
-                        <span class="detail-value">Juan González</span>
-                    </div>
-
-                    <div class="detail-item">
-                        <span class="detail-label">Habitación:</span>
-                        <span class="detail-value">Premium 302</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Check-in:</span>
-                        <span class="detail-value">15/05/2026</span>
-                    </div>
-
-                    <div class="detail-item">
-                        <span class="detail-label">Check-out:</span>
-                        <span class="detail-value">18/05/2026</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Monto pagado:</span>
-                        <span class="detail-value">\$76.500</span>
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Reserva N°:</span>
+                            <span class="detail-value">RES-{{ "%05d"|format(datos.id_reserva) }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Cliente:</span>
+                            <span class="detail-value">{{ datos.nombre_usuario }} {{ datos.ap_pat_usuario }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Habitación:</span>
+                            <span class="detail-value">{{ datos.tipo_habitacion }} {{ datos.numero_habitacion }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Check-in:</span>
+                            <span class="detail-value">{{ datos.fecha_entrada }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Check-out:</span>
+                            <span class="detail-value">{{ datos.fecha_salida }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Noches:</span>
+                            <span class="detail-value">{{ datos.noches }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Personas:</span>
+                            <span class="detail-value">{{ datos.cantidad_personas }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Valor por noche:</span>
+                            <span class="detail-value">${{ "{:,.0f}".format(datos.precio_habitacion) }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total estadía:</span>
+                            <span class="detail-value">${{ "{:,.0f}".format(datos.monto_total) }}</span>
+                        </div>
+                        <div class="detail-item" style="background:#ecfdf5; padding:10px; border-radius:6px;">
+                            <span class="detail-label">✅ Pagado ahora (30%):</span>
+                            <span class="detail-value" style="color:#059669; font-weight:700;">
+                                ${{ "{:,.0f}".format(datos.monto_pagado) }}
+                            </span>
+                        </div>
+                        <div class="detail-item" style="background:#fef3c7; padding:10px; border-radius:6px;">
+                            <span class="detail-label">⏳ Pendiente al llegar (70%):</span>
+                            <span class="detail-value" style="color:#d97706; font-weight:700;">
+                                ${{ "{:,.0f}".format(datos.monto_pendiente) }}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="actions">
-                    <a href="/ticket/pdf/247" class="btn btn-primary">Descargar PDF</a>
+                    <a href="/ticket/pdf/{{ datos.id_reserva }}" class="btn btn-primary">Descargar PDF</a>
                     <a href="/" class="btn btn-secondary">Volver al inicio</a>
                 </div>
 

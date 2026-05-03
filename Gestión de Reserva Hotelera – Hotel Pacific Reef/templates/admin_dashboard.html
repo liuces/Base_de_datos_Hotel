@@ -47,8 +47,8 @@
         <div class="sidebar-user">
             <div class="avatar">A</div>
             <div class="user-info">
-                <p>Administrador</p>
-                <span>admin@pacificreef.cl</span>
+                <p>{{ nombre }}</p>
+                <span>{{ session.correo }}</span>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
     <div class="topbar">
         <div class="topbar-left">
             <h1>Panel Admin</h1>
-            <p>Lunes, 27 de abril de 2026</p>
+            <p>{{ fecha }}</p>
         </div>
         <div class="topbar-right">
             <a href="/admin/reservas">Reservas</a>
@@ -82,25 +82,25 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon icon-azul">📅</div>
-                <div class="stat-value">12</div>
+                <div class="stat-value">{{ stats.reservas_activas }}</div>
                 <div class="stat-label">Reservas activas</div>
                 <div class="stat-trend trend-up">↑ 3 más que ayer</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon icon-verde">✅</div>
-                <div class="stat-value">3</div>
+                <div class="stat-value">{{ stats.checkin_hoy }}</div>
                 <div class="stat-label">Check-in hoy</div>
                 <div class="stat-trend trend-neu">— Sin cambios</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon icon-ambar">🚪</div>
-                <div class="stat-value">2</div>
+                <div class="stat-value">{{ stats.checkout_hoy }}</div>
                 <div class="stat-label">Check-out hoy</div>
                 <div class="stat-trend trend-down">↓ 1 menos que ayer</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon icon-dorado">📊</div>
-                <div class="stat-value">85%</div>
+                <div class="stat-value">{{ stats.ocupacion }}%</div>
                 <div class="stat-label">Ocupación</div>
                 <div class="stat-trend trend-up">↑ 5% vs semana pasada</div>
             </div>
@@ -127,56 +127,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="td-id">#247</td>
-                            <td>J. González</td>
-                            <td>Premium 302</td>
-                            <td>15/05/2026</td>
-                            <td><span class="badge badge-confirmada">Confirmada</span></td>
-                            <td>
-                                <a href="/admin/reservas/247" class="btn-accion">Ver</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="td-id">#246</td>
-                            <td>M. Torres</td>
-                            <td>Turista 201</td>
-                            <td>16/05/2026</td>
-                            <td><span class="badge badge-confirmada">Confirmada</span></td>
-                            <td>
-                                <a href="/admin/reservas/246" class="btn-accion">Ver</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="td-id">#245</td>
-                            <td>A. Pérez</td>
-                            <td>Turista 105</td>
-                            <td>17/05/2026</td>
-                            <td><span class="badge badge-pendiente">Pendiente</span></td>
-                            <td>
-                                <a href="/admin/reservas/245" class="btn-accion">Ver</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="td-id">#244</td>
-                            <td>R. Muñoz</td>
-                            <td>Premium 310</td>
-                            <td>18/05/2026</td>
-                            <td><span class="badge badge-confirmada">Confirmada</span></td>
-                            <td>
-                                <a href="/admin/reservas/244" class="btn-accion">Ver</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="td-id">#243</td>
-                            <td>C. Vega</td>
-                            <td>Suite 208</td>
-                            <td>19/05/2026</td>
-                            <td><span class="badge badge-pendiente">Pendiente</span></td>
-                            <td>
-                                <a href="/admin/reservas/243" class="btn-accion">Ver</a>
-                            </td>
-                        </tr>
+                    {% for r in reservas %}
+                    <tr>
+                        <td class="td-id">#{{ r.id_reserva }}</td>
+                        <td>{{ r.cliente }}</td>
+                        <td>{{ r.numero_habitacion }}</td>
+                        <td>{{ r.fecha_entrada }}</td>
+                        <td>
+                            <span class="badge badge-{{ r.estado_reserva }}">
+                                {{ r.estado_reserva }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="/admin/reservas/{{ r.id_reserva }}" class="btn-accion">Ver</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -191,29 +157,31 @@
                         <div class="oc-ring">
                             <svg viewBox="0 0 90 90" width="90" height="90">
                                 <circle class="ring-bg" cx="45" cy="45" r="35"/>
-                                <circle class="ring-fill" cx="45" cy="45" r="35"/>
+                                <circle class="ring-fill"
+                                    cx="45" cy="45" r="35"
+                                    style="stroke-dashoffset: {{ 220 * (1 - stats.ocupacion / 100) }}"/>
                             </svg>
                             <div class="ring-label">
-                                <span>85%</span>
+                                <span>{{ stats.ocupacion }}%</span>
                                 <small>ocupado</small>
                             </div>
                         </div>
                         <div class="oc-detalle">
                             <div class="oc-detalle-item">
                                 <span>Habitaciones totales</span>
-                                <span>20</span>
+                                <span>{{ stats.total_habitaciones }}</span>
                             </div>
                             <div class="oc-detalle-item">
                                 <span>Ocupadas</span>
-                                <span>17</span>
+                                <span>{{ stats.ocupadas }}</span>
                             </div>
                             <div class="oc-detalle-item">
                                 <span>Disponibles</span>
-                                <span>3</span>
+                                <span>{{ stats.disponibles }}</span>
                             </div>
                             <div class="oc-detalle-item">
                                 <span>Mantenimiento</span>
-                                <span>0</span>
+                                <span>{{ stats.mantencion }}</span>
                             </div>
                         </div>
                     </div>

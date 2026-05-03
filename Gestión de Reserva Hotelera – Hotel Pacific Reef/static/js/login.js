@@ -10,8 +10,9 @@ function validarLogin(e) {
         return;
     }
 
-    // Por ahora solo valida campos vacíos
-    // Cuando conectemos Flask enviará el formulario real
     errorMsg.style.display = 'none';
+    
+    // Enviar el formulario directamente sin preventDefault
+    document.getElementById('loginForm').removeEventListener('submit', validarLogin);
     document.getElementById('loginForm').submit();
 }
